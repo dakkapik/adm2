@@ -106,7 +106,7 @@ class Magnetometer():
             mag_x = self.reader(HXH)
             mag_y = self.reader(HYH)
             mag_z = self.reader(HZH)
-            if bin(bus.read_byte_data(AK8963_ADDR,AK8963_ST2))=='0b10000':
+            if bin(self.bus.read_byte_data(AK8963_ADDR,AK8963_ST2))=='0b10000':
                 return mag_x, mag_y, mag_z
             loop_count+=1
 
