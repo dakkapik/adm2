@@ -49,7 +49,7 @@ def initLoop ():
         data = sensor.kalman()
 
         inertial, mag, dt, ot, c = data
-        print(mag)
+        # print(mag)
         # if(INTEGRATED):
         #     print("INT")
         sio.emit('pi-inertial', data )
