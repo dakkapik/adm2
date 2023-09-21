@@ -52,7 +52,7 @@ def initLoop ():
 
         # if(INTEGRATED):
         #     print("INT")
-        sio.emit('pi-inertial', inertial )
+        sio.emit('pi-inertial', data )
 
         # if(DISCRETE):
         # print("DIS")
