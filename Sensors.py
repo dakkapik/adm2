@@ -23,6 +23,9 @@ HZH          = 0x08
 AK8963_ST2   = 0x09
 AK8963_CNTL  = 0x0A
 
+radToDegree = (180 / math.pi)
+
+
 class Gyroscope():
     def __init__(self, bus , sense_index = 0) -> None:
         self.bus = bus
@@ -77,9 +80,9 @@ class Accelerometer():
 
     def angles(self):
         a_x, a_y, a_z = self.normalize()
-        x = math.atan2 ( a_y, math.sqrt ( a_z *  a_z  + a_x * a_x)) * (180 / math.pi)
-        y = math.atan2 (- a_x, math.sqrt( a_z *  a_z + a_y * a_y)) * (180 / math.pi)
-        z = math.atan2 (math.sqrt( a_x *  a_x + a_y * a_y), a_z) * (180 / math.pi)
+        x = math.atan2 ( a_y, math.sqrt ( a_z *  a_z  + a_x * a_x)) * radToDegree
+        y = math.atan2 (- a_x, math.sqrt( a_z *  a_z + a_y * a_y)) * radToDegree
+        z = math.atan2 (math.sqrt( a_x *  a_x + a_y * a_y), a_z) * radToDegree
         return x, y, z
 
     def reader(self, register):

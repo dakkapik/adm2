@@ -36,8 +36,12 @@ class InertialSensor():
 		self.accel = Accelerometer(bus)
 		self.mag = Magnetometer(bus)
 
+		self.restrict_pitch = True
+  
 		self.comp =[0,0,0]
-		self.inertial = [KalmanAngle(), KalmanAngle(), KalmanAngle()]
+  
+		self.k = [KalmanAngle(), KalmanAngle(), KalmanAngle()]
+		self.inertial = [0,0,0]
   
 		self.time_init = time.time()
 		self.time_ref = self.time_init
@@ -94,31 +98,39 @@ class InertialSensor():
 		self.cycle = self.cycle + 1
 		return gyro, accel, mag, t, c, self.comp
 
-	# def kalman(self):
-	# 	dt, ot = self.getTimeDelta()
+	def kalman(self):
+		gyro = self.gyro.readForK()
+		accel = self.accel.angles()
+		mag = self.mag.heading()
 
-	# 	gyro = self.gyro.angles()
-	# 	accel = self.accel.angles()
-	# 	# mag = self.mag.heading()
-	
-	# 	self.rate = newRate - self.bias;    #new_rate is the latest Gyro measurement
-    #     self.angle += dt * self.rate
-		
- 
- 
-		# if((pitch < -90 and kalAngleY >90) or (pitch > 90 and kalAngleY < -90)):
-	    #         kalmanY.setAngle(pitch)
-	    #         complAngleY = pitch
-	    #         kalAngleY   = pitch
-	    #         gyroYAngle  = pitch
-	    #     else:
-	    #         kalAngleY = kalmanY.getAngle(pitch,gyroYRate,dt)
-
-	    #     if(abs(kalAngleY)>90):
-	    #         gyroXRate  = -gyroXRate
-	    #         kalAngleX = kalmanX.getAngle(roll,gyroXRate,dt)
+		gRateX, gRateY, gRateZ = gyro
   
-		return 
+		roll, yaw, pitch = accel 
+  
+		self.k[0].setAngle(roll)
+		self.k[1].setAngle(yaw)
+		self.k[2].setAngle(pitch)
+  
+		dt, ot = self.getTimeDelta()
+  
+		if((pitch < -90 and self.inertial[2] >90) or (pitch > 90 and self.inertial[2] < -90)):
+			self.k[2].setAngle(pitch)
+			self.inertial[2] = pitch
+		else:
+			self.inertial[2] = self.k[2].getAngle(pitch, gRateZ, dt)
+			
+		if(abs( self.inertial[2] > 90)):
+			gRateX = -gRateX
+			self.inertial[0] = self.k[0].getAngle(roll, gRateX, dt)
+   
+		self.inertial[1] = self.k[1].getAngle(yaw, gRateY, dt)
+  
+		c = self.cycle
+		self.cycle = self.cycle +1
+  
+		return self.inertial, mag, dt, ot, c
+
+  
 
 	def config_MPU(self):
 		samp_rate_div = 0 # sample rate = 8 kHz/(1+samp_rate_div)

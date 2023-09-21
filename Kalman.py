@@ -1,4 +1,3 @@
-
 class KalmanAngle:
     def __init__(self):
         self.QAngle = 0.001
