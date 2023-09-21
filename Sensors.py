@@ -38,6 +38,12 @@ class Gyroscope():
         gyro_z = self.reader(GYRO_ZOUT_H)
         return gyro_x, gyro_y, gyro_z
     
+    def readForK(self):
+        gyro_x = self.reader(GYRO_XOUT_H)/131
+        gyro_y = self.reader(GYRO_YOUT_H)/131
+        gyro_z = self.reader(GYRO_ZOUT_H)/131
+        return gyro_x, gyro_y, gyro_z
+    
     def angles(self):
         gyro_x, gyro_y, gyro_z = self.read()
         wX = (gyro_x/(2.0**15.0))*self.config_config_val[self.sense_index]
