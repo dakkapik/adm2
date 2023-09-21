@@ -1,6 +1,31 @@
+import math
+
+MPU6050_ADDR = 0x68
+PWR_MGMT_1   = 0x6B
+SMPLRT_DIV   = 0x19
+CONFIG       = 0x1A
+GYRO_CONFIG  = 0x1B
+ACCEL_CONFIG = 0x1C
+INT_ENABLE   = 0x38
+ACCEL_XOUT_H = 0x3B
+ACCEL_YOUT_H = 0x3D
+ACCEL_ZOUT_H = 0x3F
+TEMP_OUT_H   = 0x41
+GYRO_XOUT_H  = 0x43
+GYRO_YOUT_H  = 0x45
+GYRO_ZOUT_H  = 0x47
+#AK8963 registers
+AK8963_ADDR  = 0x0C
+AK8963_ST1   = 0x02
+HXH          = 0x04
+HYH          = 0x06
+HZH          = 0x08
+AK8963_ST2   = 0x09
+AK8963_CNTL  = 0x0A
 
 class Gyroscope():
-	def __init__(self, sense_index = 0) -> None:
+	def __init__(self,bus, sense_index = 0) -> None:
+        self.bus = bus
 		self.sense_index = sense_index
 		self.config_config_val = [250.0,500.0,1000.0,2000.0]
 		pass
@@ -21,8 +46,8 @@ class Gyroscope():
 
 	def reader(self, register):
 		# read accel and gyro values
-		high = bus.read_byte_data(MPU6050_ADDR, register)
-		low = bus.read_byte_data(MPU6050_ADDR, register+1)
+		high = self.bus.read_byte_data(MPU6050_ADDR, register)
+		low = self.bus.read_byte_data(MPU6050_ADDR, register+1)
 
 		# combine higha and low for unsigned bit value
 		value = ((high << 8) | low)
@@ -33,7 +58,8 @@ class Gyroscope():
 		return value
 
 class Accelerometer():
-	def __init__(self, sense_index = 0) -> None:
+	def __init__(self,bus, sense_index = 0) -> None:
+        self.bus = bus
 		self.sense_index = sense_index
 		self.sense_config_val = [2.0,4.0,8.0,16.0]
 		pass
@@ -61,8 +87,8 @@ class Accelerometer():
 
 	def reader(self, register):
 		# read accel and gyro values
-		high = bus.read_byte_data(MPU6050_ADDR, register)
-		low = bus.read_byte_data(MPU6050_ADDR, register+1)
+		high = self.bus.read_byte_data(MPU6050_ADDR, register)
+		low = self.bus.read_byte_data(MPU6050_ADDR, register+1)
 
 		# combine higha and low for unsigned bit value
 		value = ((high << 8) | low)
@@ -73,7 +99,8 @@ class Accelerometer():
 		return value
 
 class Magnetometer():
-	def __init__(self, sense_index =0) -> None:
+	def __init__(self, bus,sense_index =0) -> None:
+        self.bus = bus
 		self.sense_index = sense_index
 		self.sense_config_val = [4900.0]
 		pass
@@ -104,8 +131,8 @@ class Magnetometer():
 
 	def reader(self, register):
 		# read magnetometer values
-		low = bus.read_byte_data(AK8963_ADDR, register-1)
-		high = bus.read_byte_data(AK8963_ADDR, register)
+		low = self.bus.read_byte_data(AK8963_ADDR, register-1)
+		high = self.bus.read_byte_data(AK8963_ADDR, register)
 		# combine higha and low for unsigned bit value
 		value = ((high << 8) | low)
 		# convert to +- value

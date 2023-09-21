@@ -32,9 +32,9 @@ class InertialSensor():
 	def __init__(self) -> None:
 		self.config_MPU()
 		self.config_AK()
-		self.gyro = Gyroscope()
-		self.accel = Accelerometer()
-		self.mag = Magnetometer()
+		self.gyro = Gyroscope(bus)
+		self.accel = Accelerometer(bus)
+		self.mag = Magnetometer(bus)
 		
   		# self.inertial = [KalmanAngle(), KalmanAngle(), KalmanAngle()]
 
