@@ -144,7 +144,7 @@ class InertialSensor():
 		time.sleep(0.1)
 		#Write to Configuration register
 		bus.write_byte_data(MPU6050_ADDR, CONFIG, int('0000110',2))
-												#this remove vibrations
+												#this remove vibrations???
 		time.sleep(0.1)
 		#Write to Gyro configuration register
 		gyro_config_sel = [0b00000,0b010000,0b10000,0b11000] # byte registers
