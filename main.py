@@ -59,6 +59,7 @@ def initLoop ():
         # # if(DISCRETE):
         # # print("DIS")
         # sio.emit('pi-discrete', data )
+        time.sleep(1)
 
         
 
