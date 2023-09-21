@@ -46,17 +46,19 @@ def initLoop ():
     print("EMITING")
     while sio.handle_sigint:
         
-        data = sensor.comp_filter()
+        data = sensor.kalman()
 
-        gyro, accel, mag, time, cycle, inertial = data
+        inertial, mag, dt, ot, c = data
 
-        if(INTEGRATED):
-            print("INT")
-            sio.emit('pi-inertial', inertial )
+        print(inertial)
+        
+        # if(INTEGRATED):
+        #     print("INT")
+        #     sio.emit('pi-inertial', inertial )
 
-        # if(DISCRETE):
-        # print("DIS")
-        sio.emit('pi-discrete', data )
+        # # if(DISCRETE):
+        # # print("DIS")
+        # sio.emit('pi-discrete', data )
 
         
 
