@@ -50,17 +50,14 @@ def initLoop ():
 
         inertial, mag, dt, ot, c = data
 
-        # print(inertial)
-        
         # if(INTEGRATED):
         #     print("INT")
-        #     sio.emit('pi-inertial', inertial )
+        sio.emit('pi-inertial', inertial )
 
         # if(DISCRETE):
         # print("DIS")
-        sio.emit('pi-discrete', data )
+        # sio.emit('pi-discrete', data )
         
-        time.sleep(1)
 
         
 
