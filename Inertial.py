@@ -35,9 +35,10 @@ class InertialSensor():
 		self.gyro = Gyroscope(bus)
 		self.accel = Accelerometer(bus)
 		self.mag = Magnetometer(bus)
-		
-  		# self.inertial = [KalmanAngle(), KalmanAngle(), KalmanAngle()]
 
+		self.comp =[0,0,0]
+		self.inertial = [KalmanAngle(), KalmanAngle(), KalmanAngle()]
+  
 		self.time_init = time.time()
 		self.time_ref = self.time_init
 		self.time_prev = self.time_init
@@ -84,14 +85,14 @@ class InertialSensor():
 
 		t = self.getTimeEleapsed()
 
-		self.inertial[0] += 0.96* ( (self.inertial[0] +  gyro[0]) *  t ) + 0.04*accel[0]
-		self.inertial[1] += 0.96* ( (self.inertial[1] +  gyro[1]) *  t ) + 0.04*accel[1]
-		self.inertial[2] += 0.96* ( (self.inertial[2] +  gyro[2]) *  t ) + 0.04*accel[2]
+		self.comp[0] += 0.96* ( (self.comp[0] +  gyro[0]) *  t ) + 0.04*accel[0]
+		self.comp[1] += 0.96* ( (self.comp[1] +  gyro[1]) *  t ) + 0.04*accel[1]
+		self.comp[2] += 0.96* ( (self.comp[2] +  gyro[2]) *  t ) + 0.04*accel[2]
 
 		t = time.time() - self.time_init
 		c = self.cycle
 		self.cycle = self.cycle + 1
-		return gyro, accel, mag, t, c, self.inertial
+		return gyro, accel, mag, t, c, self.comp
 
 	# def kalman(self):
 	# 	dt, ot = self.getTimeDelta()
