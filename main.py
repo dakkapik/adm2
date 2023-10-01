@@ -61,5 +61,5 @@ def initLoop ():
 
         
 
-sio.connect('http://192.168.2.13:3000')
+sio.connect('http://192.168.0.236:3000')
 sio.wait()
